@@ -1,13 +1,52 @@
-th {
-	
-	padding: 10px;
-	background-color: black;
-	color: white;
-	width: 200px;
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-container {
+    margin: 25px;
+    padding: 10px;
+    border: black solid 3px;
+    color: black;
+}
+
+.app-item {
+    padding: 10px;
+    margin: 10px;
+    border: solid black 2px;
+    border-radius: 5px;
+}
+
+.info-item {
+    text-align: justify;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: x-large;
+}
+
+.app-container {
+    border: solid red 2px;
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+table,
+th,
+td {
+    border: black solid 2px;
+    border-collapse: collapse;
 }
 td {
-	border: black solid 2px;
-	border-radius: 5px;
-	padding: 10px;
-	
+    padding: 5px;
+    font-size: large;
+}
+
+th {
+    background: black;
+    color: white;
+    
 }

@@ -1,60 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Topbar } from '../../components';
 import { fetchInfo } from '../../services';
 import './styles.css';
 
 const UserPage = (props) => {
-	const [data, setData] = useState([]);
+    const history = useHistory();
+    const [userData, setUserData] = useState({
+        id: '',
+        name: '',
+        email: '',
+        principalName: '',
+        groups: []
+    });
+    //eslint-disable-next-line
+    const [userApplications, setAppliactions] = useState([
+        { id: 'app01', name: 'Application 01', link: 'https://www.google.com' },
+        { id: 'app02', name: 'Application 02', link: 'https://www.fb.com' },
+        { id: 'app03', name: 'Application 03', link: 'https://www.twitter.com' }
+    ]);
 
-	const fetchData = async () => {
-		try {
-			const result = await fetchInfo();
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-			setData(result.data.userInfo);
-		} catch (error) {
-			console.log(error.response.data);
-		}
-	};
+    const fetchData = async () => {
+        try {
+            const response = await fetchInfo();
+            const { user } = response.data;
+            setUserData(user);
+        } catch (error) {
+            alert(error.response.data.message + 'Please login again!');
+            //if token is invalid or not provided, redirect to login page
+            if (error.response.status === 403 || error.response.status === 401) history.push('/');
+        }
+    };
 
-	useEffect(() => {
-		fetchData();
-	}, []);
+    const onClick = (link) => {
+        window.open(link, '_blank');
+    };
+    const applications = userApplications.map((application) => (
+        <div key={application.id} className="app-item">
+            <div>{application.name}</div>
+            <button onClick={() => onClick(application.link)}>
+                Go to application
+            </button>
+        </div>
+    ));
 
-	const tableData = data.map((user, index) => (
-		<tr key={index}>
-			<td>{user.title}</td>
-			<td>{user.first_name}</td>
-			<td>{user.last_name}</td>
-			<td>{user.username}</td>
-			<td>{user.gender}</td>
-			<td>{user.email}</td>
-			<td>{user.phone_number}</td>
-			<td>{user.birthdate}</td>
-			<td>{user.location}</td>
-		</tr>
-	));
+    return (
+        <>
+            <Topbar />
+            <div className="container">
+                <div className="info-container">
+                    <div className="info-item">User ID: {userData.id}</div>
+                    <div className="info-item">Name: {userData.name}</div>
+                    <div className="info-item">Email: {userData.email}</div>
+                </div>
+                <GroupTable groups={userData.groups} />
 
-	return (
-		<div className="container">
-			<div className="table-container">
-				<table>
-					<thead>
-						<tr>
-							<th>Title</th>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Username</th>
-							<th>Gender</th>
-							<th>Email</th>
-							<th>Phone Number</th>
-							<th>DOB</th>
-							<th>Location</th>
-						</tr>
-					</thead>
-					<tbody>{tableData}</tbody>
-				</table>
-			</div>
-		</div>
-	);
+                <div className="app-container">{applications}</div>
+            </div>
+        </>
+    );
+};
+
+const GroupTable = (props) => {
+    const { groups } = props;
+    const groupList = groups.map((group) => (
+        <tr>
+            <td>{group.cn}</td>
+            <td>This is desicription.</td>
+        </tr>
+    ));
+    return (
+        <table>
+            <tr>
+                <th>Group Name</th>
+                <th>Desicription</th>
+            </tr>
+            {groupList}
+        </table>
+    );
 };
 
 export default UserPage;
