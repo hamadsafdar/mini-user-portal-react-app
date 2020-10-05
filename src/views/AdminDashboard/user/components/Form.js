@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
-import { Button } from '../../../../components/Button';
+import { Button } from '../../../../../components/Button';
 
 const Form = (props) => {
     const [user, setUser] = useState({});

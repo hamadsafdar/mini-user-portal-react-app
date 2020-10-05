@@ -48,5 +48,8 @@ td {
 th {
     background: black;
     color: white;
-    
+}
+
+table {
+    width: 100%;
 }

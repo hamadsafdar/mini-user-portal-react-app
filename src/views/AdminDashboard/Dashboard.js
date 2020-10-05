@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { AppTable, GroupTable, UserTable, AddUserForm } from './components';
+import { Modal, Button } from './../../components';
 import userServices from '../../services/admin';
 import groupServices from '../../services/group';
 import applicationServices from '../../services/application';
@@ -9,29 +11,25 @@ const Dashboard = (props) => {
     const [groups, setGroups] = useState([]);
     const [applications, setApplications] = useState([]);
     const [show, setShow] = useState(false);
-    useEffect(() => {
-        init();
-    }, []);
 
     const init = async () => {
         try {
-            const mUsers = await userServices.fetchAll();
-            const mGroups = await groupServices.fetchAll();
-            const mApplications = await applicationServices.fetchAll();
-            setUsers({
-                ...users,
-                mUsers
-            });
-            setGroups({
-                ...groups,
-                mGroups
-            });
-            setApplications({
+            const mUsers = await (await userServices.fetchAll()).data.users;
+            const mGroups = await (await groupServices.fetchAll()).data.groups;
+            const mApplications = await (await applicationServices.fetchAll())
+                .data.applications;
+            setUsers((users) => [...users, ...mUsers]);
+            setGroups((groups) => [...groups, ...mGroups]);
+            setApplications((applications) => [
                 ...applications,
-                mApplications
-            });
+                ...mApplications
+            ]);
         } catch (error) {}
     };
+
+    useEffect(() => {
+        init();
+    }, []);
 
     const createUser = async (user) => {
         try {
@@ -46,110 +44,56 @@ const Dashboard = (props) => {
         }
     };
 
+    const createGroup = async (group) => {
+        try {
+            const response = await groupServices.create(group);
+            if (response.status === 201) {
+                alert('A new group is created!');
+                init();
+            }
+        } catch (error) {
+            alert(error);
+        }
+    };
+
+    const createApplication = async (application) => {
+        try {
+            const response = await applicationServices.create(application);
+            if (response.status === 201) {
+                alert('A new group is created!');
+                init();
+            }
+        } catch (error) {
+            alert(error);
+        }
+    };
+
+    const onAddClick = () => {
+        setShow(true);
+    };
+
     return (
         <div className="container">
+            <Modal show={show} handleClose={() => setShow(false)} title="hello">
+                <AddUserForm createUser={createUser} />
+            </Modal>
             <div className="user-container">
                 Users:
-                <UserTables users={users} />
-                <button>Add new user</button>
+                <UserTable users={users} />
+                <Button onClick={onAddClick}>Add new user</Button>
             </div>
             <div className="group-container">
                 Groups:
-                <GroupTables groups={groups} />
-                <button>Add new group</button>
+                <GroupTable groups={groups} />
+                <Button>Add new group</Button>
             </div>
             <div className="application-container">
                 Applications:
-                <ApplicationTables applications={applications} />
-                <button>Add new application</button>
+                <AppTable applications={applications} />
+                <Button>Add new application</Button>
             </div>
         </div>
     );
-};
-
-const UserTables = (props) => {
-    const { users } = props;
-    const userList = users.map((user) => (
-        <tr key={user._id}>
-            <td>{user.name}</td>
-            <td>{user.sAMAccountName}</td>
-            <td>{user.email}</td>
-            <td>{user.principalName}</td>
-            <td>Groups</td>
-            <td>{user.status}</td>
-            <td>
-                <div>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-            </td>
-        </tr>
-    ));
-    return (
-        <>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>SAM Account Name</th>
-                        <th>Email</th>
-                        <th>Principal Name</th>
-                        <th>Member of</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>{userList}</tbody>
-            </table>
-        </>
-    );
-};
-
-const ApplicationTables = (props) => {
-    const { applications } = props;
-    const appList = applications.map((application) => <tr></tr>);
-    return (
-        <>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Groups Allowed</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>{appList}</tbody>
-            </table>
-        </>
-    );
-};
-
-const GroupTables = (props) => {
-    const { groups } = props;
-    const groupList = groups.map((group) => <tr></tr>);
-    return (
-        <>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>{groupList}</tbody>
-            </table>
-        </>
-    );
-};
-
-const Modal = (props) => {
-    const [show, setShow] = useState(true);
-};
-
-const AddUserForm = (props) => {
-    const [user, setUser] = useState({});
 };
 
 export default Dashboard;
