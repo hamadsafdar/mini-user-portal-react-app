@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
+import { Button } from '../../../../components';
 import PropTypes from 'prop-types';
 import './styles.css';
 
 const Form = (props) => {
-    const [user, setUser] = useState({});
-    const { createUser } = props;
+    const [group, setGroup] = useState({});
+
+    const { createGroup } = props;
 
     const onChangeHandler = (event) => {
         const { name, value } = event.target;
-        setUser({
-            ...user,
+        setGroup({
+            ...group,
             [name]: value
         });
     };
 
     const onSubmitHandler = () => {
-        createUser(user);
+        createGroup(group);
     };
 
     return (
@@ -24,43 +26,39 @@ const Form = (props) => {
                 className="form-item"
                 type="text"
                 name="name"
-                value={user.name}
+                value={group.name}
                 onChange={onChangeHandler}
-                placeholder="Full Name"
+                placeholder="Group Name"
             />
             <input
                 className="form-item"
                 type="text"
-                name="email"
-                value={user.email}
+                name="description"
+                value={group.description}
                 onChange={onChangeHandler}
-                placeholder="Email"
+                placeholder="Description"
             />
-            <input
-                className="form-item"
-                type="text"
-                name="sAMAccountName"
-                value={user.sAMAccountName}
-                onChange={onChangeHandler}
-                placeholder="SAM Account Name"
-            />
-            <input
-                className="form-item"
-                type="text"
-                name="principalName"
-                value={user.principalName}
-                onChange={onChangeHandler}
-                placeholder="Principal Name"
-            />
-            <button onClick={onSubmitHandler}>Create</button>
+            {/* <Dropdown options={type} setSelected={setSelected} /> */}
+            <Button onClick={onSubmitHandler}>Create</Button>
         </div>
     );
 };
 
 Form.propTypes = {
-    createUser: PropTypes.func.isRequired
+    createGroup: PropTypes.func.isRequired
 };
 
 Form.defaultProps = {};
 
 export default Form;
+
+// const type = [
+//     {
+//         label: 'A',
+//         value: 'a'
+//     },
+//     {
+//         label: 'B',
+//         value: 'b'
+//     }
+// ];

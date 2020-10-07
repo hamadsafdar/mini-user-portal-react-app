@@ -1,4 +1,3 @@
-import { stripTrailingSlash } from 'history/PathUtils';
 import constants from './constants';
 
 const initialState = {};
@@ -15,6 +14,13 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 isError: true,
                 error: action.payload
+            };
+        case constants.INIT:
+            return {
+                ...state,
+                users: [...action.users],
+                applications: [...action.applications],
+                groups: [...action.groups]
             };
         default:
             return state;

@@ -1,86 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Topbar } from '../../components';
-import { fetchInfo } from '../../services';
+import { ApplicationTable, GroupTable } from './user/components';
+import { fetchApplications, fetchInfo } from './user/services';
 import './styles.css';
 
 const UserPage = (props) => {
-    const history = useHistory();
-    const [userData, setUserData] = useState({
-        id: '',
-        name: '',
-        email: '',
-        principalName: '',
-        groups: []
-    });
+    const [userData, setData] = useState({});
     //eslint-disable-next-line
-    const [userApplications, setAppliactions] = useState([
-        { id: 'app01', name: 'Application 01', link: 'https://www.google.com' },
-        { id: 'app02', name: 'Application 02', link: 'https://www.fb.com' },
-        { id: 'app03', name: 'Application 03', link: 'https://www.twitter.com' }
-    ]);
+    const [userApplications, setAppliactions] = useState([]);
 
     useEffect(() => {
         fetchData();
+        fetchAppData();
     }, []);
-
-    const fetchData = async () => {
+    const history = useHistory();
+    const fetchAppData = async () => {
         try {
-            const response = await fetchInfo();
-            const { user } = response.data;
-            setUserData(user);
+            const response = await fetchApplications();
+            const { applications } = await response.data;
+            setAppliactions(applications);
         } catch (error) {
             alert(error.response.data.message + 'Please login again!');
             //if token is invalid or not provided, redirect to login page
-            if (error.response.status === 403 || error.response.status === 401) history.push('/');
+            if (error.response.status === 403 || error.response.status === 401)
+                history.push('/');
         }
     };
-
-    const onClick = (link) => {
-        window.open(link, '_blank');
+    const fetchData = async () => {
+        try {
+            const response = await fetchInfo();
+            const { user } = await response.data;
+            setData(user);
+        } catch (error) {
+            alert(error.response.data.message + 'Please login again!');
+            //if token is invalid or not provided, redirect to login page
+            if (error.response.status === 403 || error.response.status === 401)
+                history.push('/');
+        }
     };
-    const applications = userApplications.map((application) => (
-        <div key={application.id} className="app-item">
-            <div>{application.name}</div>
-            <button onClick={() => onClick(application.link)}>
-                Go to application
-            </button>
-        </div>
-    ));
 
     return (
         <>
             <Topbar />
             <div className="container">
                 <div className="info-container">
-                    <div className="info-item">User ID: {userData.id}</div>
-                    <div className="info-item">Name: {userData.name}</div>
-                    <div className="info-item">Email: {userData.email}</div>
+                    <div className="info-item">User ID: {userData._id}</div>
+                    <div className="info-item">
+                        SAM Account Name: {userData.sAMAccountName}
+                    </div>
+                    <div className="info-item">
+                        Status: {userData.isEnable ? 'Enabled' : 'Disabled'}
+                    </div>
                 </div>
-                <GroupTable groups={userData.groups} />
-
-                <div className="app-container">{applications}</div>
+                {userData.groupMembership ? (
+                    <GroupTable groups={userData.groupMembership} />
+                ) : (
+                    <div>No data</div>
+                )}
+                {userApplications ? (
+                    <ApplicationTable applications={userApplications} />
+                ) : (
+                    <div>No data</div>
+                )}
             </div>
         </>
-    );
-};
-
-const GroupTable = (props) => {
-    const { groups } = props;
-    const groupList = groups.map((group) => (
-        <tr>
-            <td>{group.cn}</td>
-            <td>This is desicription.</td>
-        </tr>
-    ));
-    return (
-        <table>
-            <tr>
-                <th>Group Name</th>
-                <th>Desicription</th>
-            </tr>
-            {groupList}
-        </table>
     );
 };
 

@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const GroupTable = (props) => {
-    const { groups } = props;
+    const { groups, removeGroup } = props;
+
+    const onDeleteClick = (groupId) => {
+        removeGroup(groupId);
+    };
     const groupList = groups.map((group) => (
         <tr key={group._id}>
             <td>{group.name}</td>
@@ -11,7 +15,9 @@ const GroupTable = (props) => {
             <td>
                 <div>
                     <button>Edit</button>
-                    <button>Delete</button>
+                    <button onClick={() => removeGroup(group._id)}>
+                        Delete
+                    </button>
                 </div>
             </td>
         </tr>
@@ -34,7 +40,8 @@ const GroupTable = (props) => {
 };
 
 GroupTable.propTypes = {
-    groups: PropTypes.array
+    groups: PropTypes.array.isRequired,
+    removeGroup: PropTypes.func.isRequired
 };
 
 export default GroupTable;

@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
+import { Button } from '../../../../components';
 
 const Form = (props) => {
-    const [user, setUser] = useState({});
-    const { createUser } = props;
+    const [application, setApplication] = useState({});
+    const { createApplication } = props;
 
     const onChangeHandler = (event) => {
         const { name, value } = event.target;
-        setUser({
-            ...user,
+        setApplication({
+            ...application,
             [name]: value
         });
     };
 
     const onSubmitHandler = () => {
-        createUser(user);
+        createApplication(application);
     };
 
     return (
@@ -24,41 +25,33 @@ const Form = (props) => {
                 className="form-item"
                 type="text"
                 name="name"
-                value={user.name}
+                value={application.name}
                 onChange={onChangeHandler}
                 placeholder="Full Name"
             />
             <input
                 className="form-item"
                 type="text"
-                name="email"
-                value={user.email}
+                name="description"
+                value={application.description}
                 onChange={onChangeHandler}
-                placeholder="Email"
+                placeholder="Description"
             />
             <input
                 className="form-item"
                 type="text"
-                name="sAMAccountName"
-                value={user.sAMAccountName}
+                name="link"
+                value={application.link}
                 onChange={onChangeHandler}
-                placeholder="SAM Account Name"
+                placeholder="Link to Application"
             />
-            <input
-                className="form-item"
-                type="text"
-                name="principalName"
-                value={user.principalName}
-                onChange={onChangeHandler}
-                placeholder="Principal Name"
-            />
-            <button onClick={onSubmitHandler}>Create</button>
+            <Button onClick={onSubmitHandler}>Create</Button>
         </div>
     );
 };
 
 Form.propTypes = {
-    createUser: PropTypes.func.isRequired
+    createApplication: PropTypes.func.isRequired
 };
 
 Form.defaultProps = {};
