@@ -1,2 +1,1 @@
-export { default as UserTable } from './Table';
-export { default as AddUserForm } from './Form';
+export { default as UserMain } from './Main';

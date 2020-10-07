@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const UserTable = (props) => {
-    const { users, removeUser } = props;
+    const { users, removeUser, editUser } = props;
 
     const onDeleteClick = (userId) => {
         removeUser(userId);
@@ -48,7 +48,8 @@ const UserTable = (props) => {
 
 UserTable.propTypes = {
     users: PropTypes.array.isRequired,
-    removeUser: PropTypes.func.isRequired
+    removeUser: PropTypes.func.isRequired,
+    editUser: PropTypes.func.isRequired
 };
 
 export default UserTable;

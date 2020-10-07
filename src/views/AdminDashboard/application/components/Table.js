@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ApplicationTable = (props) => {
-    const { applications } = props;
+    const { applications, removeApp, editApp } = props;
     const linkClick = (link) => {
         window.open(link, '_blank');
     };
@@ -45,7 +45,9 @@ const ApplicationTable = (props) => {
 };
 
 ApplicationTable.propTypes = {
-    applications: PropTypes.array
+    applications: PropTypes.array.isRequired,
+    removeApp: PropTypes.func.isRequired,
+    editApp: PropTypes.func.isRequired
 };
 
 export default ApplicationTable;

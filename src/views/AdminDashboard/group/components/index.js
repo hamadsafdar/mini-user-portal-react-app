@@ -1,2 +1,1 @@
-export { default as GroupTable } from './Table';
-export { default as AddGroupForm } from './Form';
+export { default as GroupMain } from './Main';

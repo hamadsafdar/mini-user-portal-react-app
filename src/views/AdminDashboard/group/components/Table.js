@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const GroupTable = (props) => {
-    const { groups, removeGroup } = props;
+    const { groups, removeGroup, editGroup } = props;
 
     const onDeleteClick = (groupId) => {
         removeGroup(groupId);
@@ -41,7 +41,8 @@ const GroupTable = (props) => {
 
 GroupTable.propTypes = {
     groups: PropTypes.array.isRequired,
-    removeGroup: PropTypes.func.isRequired
+    removeGroup: PropTypes.func.isRequired,
+    editGroup: PropTypes.func.isRequired
 };
 
 export default GroupTable;

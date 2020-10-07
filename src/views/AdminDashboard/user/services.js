@@ -23,4 +23,9 @@ async function create(user) {
 
 async function modify() {}
 
-export default { fetchAll, fetch, remove, create, modify };
+async function changeStatus(userId) {
+    const reqUrl = `${config.getBaseUrl()}/admin/user/${userId}`;
+    return await axios.post(reqUrl);
+}
+
+export default { fetchAll, fetch, remove, create, modify, changeStatus }; 

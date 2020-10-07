@@ -3,7 +3,8 @@ const constants = {
     FETCH: 'GROUP_FETCH',
     DELETE: 'GROUP_DELETE',
     EDIT: 'GROUP_EDIT',
-    CREATE: 'GROUP_CREATE'
+    CREATE: 'GROUP_CREATE',
+    INIT: 'GROUP_COMPONENT_INIT'
 };
 
 export default constants;
